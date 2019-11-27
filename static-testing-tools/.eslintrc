@@ -2,7 +2,10 @@
     "parserOptions": {
         "ecmaVersion": "2018"
     },
+    "extend": [
+        "eslint:recommended"
+    ],
     "rules": {
-        "valid-typeof": "warn"
+        "valid-typeof": "off"
     }
 }
