@@ -6,6 +6,9 @@
         "eslint:recommended"
     ],
     "rules": {
-        "valid-typeof": "off"
+        "no-console": "off"
+    },
+    "env": {
+        "browser": true
     }
 }
