@@ -2,7 +2,7 @@
     "parserOptions": {
         "ecmaVersion": "2018"
     },
-    "extend": [
+    "extends": [
         "eslint:recommended"
     ],
     "rules": {
