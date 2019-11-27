@@ -3,6 +3,6 @@
         "ecmaVersion": "2018"
     },
     "rules": {
-        "valid-typeof": "error"
+        "valid-typeof": "warn"
     }
 }
