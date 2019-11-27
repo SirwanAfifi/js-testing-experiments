@@ -1,0 +1,23 @@
+{
+  "name": "static-testing-tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src",
+    "format": "npm run prettier -- --write",
+    "prettier": "prettier \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx|graphql|vue)\"",
+    "validate": "npm run lint && npm run prettier -- --list-different",
+    "precommit": "npm run validate"
+  },
+  "keywords": [],
+  "author": "Sirwan Afifi <sir1afifi@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^3.1.0",
+    "prettier": "^1.19.1"
+  },
+  "dependencies": {
+    "eslint": "^6.7.1"
+  }
+}
