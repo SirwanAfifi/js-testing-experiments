@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel src --out-dir dist"
+    "build": "babel src --out-dir dist",
+    "lint": "npx eslint"
   },
   "keywords": [],
   "author": "Sirwan Afifi <sir1afifi@gmail.com>",
