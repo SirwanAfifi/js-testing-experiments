@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir dist",
-    "lint": "npx eslint"
+    "lint": "npx eslint --ignore-path .gitignore ."
   },
   "keywords": [],
   "author": "Sirwan Afifi <sir1afifi@gmail.com>",
