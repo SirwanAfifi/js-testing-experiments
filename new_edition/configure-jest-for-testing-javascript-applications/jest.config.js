@@ -1,6 +1,7 @@
 module.exports = {
   testEnvironment: "jest-environment-jsdom",
   moduleNameMapper: {
-    '\\.css$': require.resolve('./test/style-mock.js')
+    '\\.module\\.css$': 'identity-obj-proxy',
+    '\\.css$': require.resolve('./test/style-mock.js'),
   }
 };
