@@ -41,6 +41,7 @@
     "webpack-serve": "^1.0.4"
   },
   "dependencies": {
+    "@testing-library/react": "^9.4.0",
     "emotion": "^9.2.4",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
