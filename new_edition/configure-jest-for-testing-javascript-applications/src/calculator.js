@@ -1,190 +1,190 @@
-import React from 'react'
-import PointTarget from 'react-point'
-import loadable from 'react-loadable'
-import PropTypes from 'prop-types'
-import styles from './calculator.module.css'
+import React from "react";
+import PointTarget from "react-point";
+import loadable from "react-loadable";
+import PropTypes from "prop-types";
+import styles from "./calculator.module.css";
 
 // NOTE: Normally I wouldn't do this, but I wanted to include code
 // splitting in this example because it's something you have to
 // handle with Jest and many people will want to know :).
 const CalculatorDisplay = loadable({
-  loader: () => import('calculator-display').then(mod => mod.default),
+  loader: () => import("calculator-display").then(mod => mod.default),
   loading: () => <div style={{height: 120}}>Loading display...</div>,
-})
+});
 
 class CalculatorKey extends React.Component {
   static propTypes = {
     onPress: PropTypes.func.isRequired,
     className: PropTypes.string,
-  }
+  };
   render() {
-    const {onPress, className = '', ...props} = this.props
+    const {onPress, className = "", ...props} = this.props;
 
     return (
       <PointTarget onPoint={onPress}>
         <button className={`${styles.calculatorKey} ${className}`} {...props} />
       </PointTarget>
-    )
+    );
   }
 }
 
 const CalculatorOperations = {
-  '/': (prevValue, nextValue) => prevValue / nextValue,
-  '*': (prevValue, nextValue) => prevValue * nextValue,
-  '+': (prevValue, nextValue) => prevValue + nextValue,
-  '-': (prevValue, nextValue) => prevValue - nextValue,
-  '=': (prevValue, nextValue) => nextValue,
-}
+  "/": (prevValue, nextValue) => prevValue / nextValue,
+  "*": (prevValue, nextValue) => prevValue * nextValue,
+  "+": (prevValue, nextValue) => prevValue + nextValue,
+  "-": (prevValue, nextValue) => prevValue - nextValue,
+  "=": (prevValue, nextValue) => nextValue,
+};
 
 class Calculator extends React.Component {
   state = {
     value: null,
-    displayValue: '0',
+    displayValue: "0",
     operator: null,
     waitingForOperand: false,
-  }
+  };
 
   clearAll() {
     this.setState({
       value: null,
-      displayValue: '0',
+      displayValue: "0",
       operator: null,
       waitingForOperand: false,
-    })
+    });
   }
 
   clearDisplay() {
     this.setState({
-      displayValue: '0',
-    })
+      displayValue: "0",
+    });
   }
 
   clearLastChar() {
-    const {displayValue} = this.state
+    const {displayValue} = this.state;
 
     this.setState({
-      displayValue: displayValue.substring(0, displayValue.length - 1) || '0',
-    })
+      displayValue: displayValue.substring(0, displayValue.length - 1) || "0",
+    });
   }
 
   toggleSign() {
-    const {displayValue} = this.state
-    const newValue = parseFloat(displayValue) * -1
+    const {displayValue} = this.state;
+    const newValue = parseFloat(displayValue) * -1;
 
     this.setState({
       displayValue: String(newValue),
-    })
+    });
   }
 
   inputPercent() {
-    const {displayValue} = this.state
-    const currentValue = parseFloat(displayValue)
+    const {displayValue} = this.state;
+    const currentValue = parseFloat(displayValue);
 
-    if (currentValue === 0) return
+    if (currentValue === 0) return;
 
-    const fixedDigits = displayValue.replace(/^-?\d*\.?/, '')
-    const newValue = parseFloat(displayValue) / 100
+    const fixedDigits = displayValue.replace(/^-?\d*\.?/, "");
+    const newValue = parseFloat(displayValue) / 100;
 
     this.setState({
       displayValue: String(newValue.toFixed(fixedDigits.length + 2)),
-    })
+    });
   }
 
   inputDot() {
-    const {displayValue} = this.state
+    const {displayValue} = this.state;
 
     if (!/\./.test(displayValue)) {
       this.setState({
         displayValue: `${displayValue}.`,
         waitingForOperand: false,
-      })
+      });
     }
   }
 
   inputDigit(digit) {
-    const {displayValue, waitingForOperand} = this.state
+    const {displayValue, waitingForOperand} = this.state;
 
     if (waitingForOperand) {
       this.setState({
         displayValue: String(digit),
         waitingForOperand: false,
-      })
+      });
     } else {
       this.setState({
         displayValue:
-          displayValue === '0' ? String(digit) : displayValue + digit,
-      })
+          displayValue === "0" ? String(digit) : displayValue + digit,
+      });
     }
   }
 
   performOperation(nextOperator) {
-    const {value, displayValue, operator} = this.state
-    const inputValue = parseFloat(displayValue)
+    const {value, displayValue, operator} = this.state;
+    const inputValue = parseFloat(displayValue);
 
     if (value == null) {
       this.setState({
         value: inputValue,
-      })
+      });
     } else if (operator) {
-      const currentValue = value || 0
-      const newValue = CalculatorOperations[operator](currentValue, inputValue)
+      const currentValue = value || 0;
+      const newValue = CalculatorOperations[operator](currentValue, inputValue);
 
       this.setState({
         value: newValue,
         displayValue: String(newValue),
-      })
+      });
     }
 
     this.setState({
       waitingForOperand: true,
       operator: nextOperator,
-    })
+    });
   }
 
   handleKeyDown = event => {
-    let {key} = event
+    let {key} = event;
 
-    if (key === 'Enter') key = '='
+    if (key === "Enter") key = "=";
 
     if (/\d/.test(key)) {
-      event.preventDefault()
-      this.inputDigit(parseInt(key, 10))
+      event.preventDefault();
+      this.inputDigit(parseInt(key, 10));
     } else if (key in CalculatorOperations) {
-      event.preventDefault()
-      this.performOperation(key)
-    } else if (key === '.') {
-      event.preventDefault()
-      this.inputDot()
-    } else if (key === '%') {
-      event.preventDefault()
-      this.inputPercent()
-    } else if (key === 'Backspace') {
-      event.preventDefault()
-      this.clearLastChar()
-    } else if (key === 'Clear') {
-      event.preventDefault()
+      event.preventDefault();
+      this.performOperation(key);
+    } else if (key === ".") {
+      event.preventDefault();
+      this.inputDot();
+    } else if (key === "%") {
+      event.preventDefault();
+      this.inputPercent();
+    } else if (key === "Backspace") {
+      event.preventDefault();
+      this.clearLastChar();
+    } else if (key === "Clear") {
+      event.preventDefault();
 
-      if (this.state.displayValue === '0') {
-        this.clearAll()
+      if (this.state.displayValue === "0") {
+        this.clearAll();
       } else {
-        this.clearDisplay()
+        this.clearDisplay();
       }
     }
-  }
+  };
 
   componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown)
+    document.addEventListener("keydown", this.handleKeyDown);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown)
+    document.removeEventListener("keydown", this.handleKeyDown);
   }
 
   render() {
-    const {displayValue} = this.state
+    const {displayValue} = this.state;
 
-    const clearDisplay = displayValue !== '0'
-    const clearText = clearDisplay ? 'C' : 'AC'
+    const clearDisplay = displayValue !== "0";
+    const clearText = clearDisplay ? "C" : "AC";
 
     return (
       <div className={styles.calculator}>
@@ -285,41 +285,41 @@ class Calculator extends React.Component {
           <div className={styles.operatorKeys}>
             <CalculatorKey
               className={styles.keyDivide}
-              onPress={() => this.performOperation('/')}
+              onPress={() => this.performOperation("/")}
             >
               ÷
             </CalculatorKey>
             <CalculatorKey
               className={styles.keyMultiply}
-              onPress={() => this.performOperation('*')}
+              onPress={() => this.performOperation("*")}
             >
               ×
             </CalculatorKey>
             <CalculatorKey
               className={styles.keySubtract}
-              onPress={() => this.performOperation('-')}
+              onPress={() => this.performOperation("-")}
             >
               −
             </CalculatorKey>
             <CalculatorKey
               className={styles.keyAdd}
-              onPress={() => this.performOperation('+')}
+              onPress={() => this.performOperation("+")}
             >
               +
             </CalculatorKey>
             <CalculatorKey
               className={styles.keyEquals}
-              onPress={() => this.performOperation('=')}
+              onPress={() => this.performOperation("=")}
             >
               =
             </CalculatorKey>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Calculator
+export default Calculator;
 
 /* eslint no-eq-null:0, eqeqeq:0, react/display-name:0 */

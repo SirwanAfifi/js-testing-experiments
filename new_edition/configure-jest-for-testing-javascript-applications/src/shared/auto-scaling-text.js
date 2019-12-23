@@ -1,31 +1,31 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styles from './auto-scaling-text.module.css'
+import React from "react";
+import PropTypes from "prop-types";
+import styles from "./auto-scaling-text.module.css";
 
 class AutoScalingText extends React.Component {
   static propTypes = {
     children: PropTypes.node,
-  }
-  node = React.createRef()
+  };
+  node = React.createRef();
   getScale() {
-    const node = this.node.current
+    const node = this.node.current;
     if (!node) {
-      return 1
+      return 1;
     }
-    const parentNode = node.parentNode
+    const parentNode = node.parentNode;
 
-    const availableWidth = parentNode.offsetWidth
-    const actualWidth = node.offsetWidth
-    const actualScale = availableWidth / actualWidth
+    const availableWidth = parentNode.offsetWidth;
+    const actualWidth = node.offsetWidth;
+    const actualScale = availableWidth / actualWidth;
 
     if (actualScale < 1) {
-      return actualScale * 0.9
+      return actualScale * 0.9;
     }
-    return 1
+    return 1;
   }
 
   render() {
-    const scale = this.getScale()
+    const scale = this.getScale();
 
     return (
       <div
@@ -35,8 +35,8 @@ class AutoScalingText extends React.Component {
       >
         {this.props.children}
       </div>
-    )
+    );
   }
 }
 
-export default AutoScalingText
+export default AutoScalingText;
